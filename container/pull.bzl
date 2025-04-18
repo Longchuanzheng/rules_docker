@@ -135,6 +135,10 @@ _container_pull_attrs = {
 
         This attribute will be overridden by the PULLER_TIMEOUT environment variable, if it is set.""",
     ),
+    "insecure_repository": attr.bool(
+        default = False,
+        doc = "(optional) If true, allow pulling from insecure (HTTP) registries.",
+    ),
 }
 
 def _impl(repository_ctx):
@@ -175,6 +179,9 @@ def _impl(repository_ctx):
         "-features",
         " ".join(repository_ctx.attr.platform_features),
     ]
+
+    if repository_ctx.attr.insecure_repository:
+         args += ["-insecure-repository"]
 
     # Use the custom docker client config directory if specified.
     docker_client_config = repository_ctx.attr.docker_client_config
